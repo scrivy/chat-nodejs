@@ -1,15 +1,18 @@
-var express = require("express");
-var app = express();
+var Express = require("express");
+var app = Express();
 var port = 3700;
 
-app.set('views', __dirname + '/tpl');
+app.set('views', __dirname + '/views');
 app.set('view engine', "jade");
-app.engine('jade', require('jade').__express);
-app.get("/", function(req, res){
-    res.render("page");
+app.use(Express.favicon());
+app.use(Express.logger('dev'));
+app.use(Express.bodyParser());
+app.use(Express.methodOverride());
+app.get("/", function(req, res) {
+  res.render("index");
 });
 
-app.use(express.static(__dirname + '/public'));
+app.use(Express.static(__dirname + '/public'));
 var io = require('socket.io').listen(app.listen(port));
 console.log("Listening on port " + port);
 
