@@ -1,6 +1,6 @@
 var Express = require("express");
 var app = Express();
-var port = process.env.PORT || 3700;
+var port = process.env.chatport || 3700;
 
 app.set('views', __dirname + '/views');
 app.set('view engine', "jade");
