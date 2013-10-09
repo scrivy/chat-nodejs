@@ -6,7 +6,7 @@ window.onload = function() {
     var sendButton = document.getElementById("send");
     var content = document.getElementById("content");
     var name = document.getElementById("name");
-    password = prompt("you're a weasel");
+    password = CryptoJS.SHA256(prompt("you're a weasel"));
 
     socket.on('message', function (data) {
         if(data.message) {
