@@ -1,7 +1,7 @@
 window.onload = function() {
 
     var messages = [];
-    var socket = io.connect('http://psst.in');
+    var socket = io.connect('http://www.psst.in');
     var field = document.getElementById("field");
     var sendButton = document.getElementById("send");
     var content = document.getElementById("content");
