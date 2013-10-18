@@ -4,16 +4,19 @@ html
     meta(charset='utf-8')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     title= 'chat'
-    script(src='/jquery-2.0.3.min.js')
-    script(src='/aes.js')
-    script(src='/sha256.js')
-    script(src='/chat.js')
-    script(src='/socket.io/socket.io.js')
+    link(rel='stylesheet', href='css/button.min.css')
+    link(rel='stylesheet', href='css/input.min.css')
+    script(src='js/jquery-2.0.3.min.js')
+    script(src='js/aes.js')
+    script(src='js/sha256.js')
+    script(src='js/chat.js')
+    script(src='socket.io/socket.io.js')
   body
     #content(style='width: 500px; height: 300px; margin: 0 0 20px 0; border: solid 1px #999; overflow-y: scroll;')
     .controls
     | Name: 
     input#name(style='width:350px;')
     br
-    input#field(style='width:350px;')
-    input#send(type='button', value='send')
+    .ui.action.input
+      input#field(placeholder='message...', style='width:350px;')
+      #send.ui.button send
