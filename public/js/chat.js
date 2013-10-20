@@ -5,7 +5,7 @@ window.onload = function() {
     var field = document.getElementById("field");
     var sendButton = document.getElementById("send");
     var content = document.getElementById("content");
-    var name = document.getElementById("name");
+    name = prompt('name?');
     password = CryptoJS.SHA256(prompt("password?")).toString();
 
     socket.on('message', function (data) {
@@ -27,14 +27,10 @@ window.onload = function() {
     });
 
     sendButton.onclick = sendMessage = function() {
-        if(name.value == "") {
-            alert("Please type your name!");
-        } else {
-            var encrypted = CryptoJS.AES.encrypt(field.value, password);
-            console.log('sending - ' + encrypted.toString());
-            socket.emit('send', { message: encrypted.toString(), username: name.value });
-            field.value = "";
-        }
+        var encrypted = CryptoJS.AES.encrypt(field.value, password);
+        console.log('sending - ' + encrypted.toString());
+        socket.emit('send', { message: encrypted.toString(), username: name });
+        field.value = "";
     };
 
     $(document).ready(function() {

@@ -4,27 +4,25 @@ html
     meta(charset='utf-8')
     meta(name='viewport', content='initial-scale=1,maximum-scale=1,user-scalable=no')
     title= 'chat'
-    link(rel='stylesheet', href='css/normalize.css')
-    link(rel='stylesheet', href='css/foundation.min.css')
-    link(rel='stylesheet', href='css/semanticui/button.min.css')
-    link(rel='stylesheet', href='css/semanticui/input.min.css')
+    link(rel='stylesheet', href='css/semantic.min.css')
+    link(rel='stylesheet', href='css/chat.css')
+  body
+    .ui.transparent.inverted.main.menu
+      .container
+        a.item.active
+          i.home.icon
+          | Room
+        a.item People
+    .main.container
+      #content(style='height: 10em; overflow-y: scroll;')
+      br
+      .ui.action.input(style='width:100%;')
+        input#field(placeholder='message...')
+        #send.ui.button send
+
+    script(src='socket.io/socket.io.js')
+    script(src='js/jquery-2.0.3.min.js')
+    script(src='js/semantic.min.js')
     script(src='js/aes.js')
     script(src='js/sha256.js')
-    script(src='socket.io/socket.io.js')
     script(src='js/chat.js')
-    script(src='js/vendor/custom.modernizr.js')
-    script(src='js/vendor/zepto.js')
-    script(src='js/foundation.min.js')
-  body
-    .row
-      .large-12.columns
-        .panel
-          #content(style='border: solid 1px #999; overflow-y: scroll;')
-    .controls
-    | Name: 
-    input#name
-    br
-    .ui.action.input
-      input#field(placeholder='message...')
-      #send.ui.button send
-    script $(document).foundation();
