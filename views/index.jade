@@ -28,7 +28,6 @@ html
     script(type='text/javascript').
       window.onload = function() {
 
-        var messages = [];
         var socket = io.connect('');
         var field = document.getElementById("field");
         var sendButton = document.getElementById("send");
@@ -42,18 +41,16 @@ html
 
             try {
               var message = JSON.parse(CryptoJS.AES.decrypt(data, password).toString(CryptoJS.enc.Utf8));
+
+              var html = '<b>' + message.username + ': </b>';
+              html += message.message + '<br />';
+
+              $('#content').append(html);
+
+              content.scrollTop = content.scrollHeight;
             } catch(err) {
-              console.log('caught error - ' + err);
+              console.log('Error decrypting, wrong key probably - ' + err);
             }
-
-            var html = '<b>' + message.username + ': </b>';
-            html += message.message + '<br />';
-
-            $('#content').append(html);
-
-            content.scrollTop = content.scrollHeight;
-          } else {
-            console.log("There is a problem:");
           }
         });
 
@@ -69,10 +66,10 @@ html
         };
 
         $(document).ready(function() {
-        $("#field").keyup(function(e) {
-        if(e.keyCode == 13) {
-        sendMessage();
-        }
-        });
+          $("#field").keyup(function(e) {
+            if(e.keyCode == 13) {
+              sendMessage();
+            }
+          });
         });
       }
