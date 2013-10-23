@@ -25,4 +25,54 @@ html
     script(src='js/semantic.min.js')
     script(src='js/aes.js')
     script(src='js/sha256.js')
-    script(src='js/chat.js')
+    script(type='text/javascript').
+      window.onload = function() {
+
+        var messages = [];
+        var socket = io.connect('');
+        var field = document.getElementById("field");
+        var sendButton = document.getElementById("send");
+        var content = document.getElementById("content");
+        name = prompt('name?');
+        password = CryptoJS.SHA256(prompt("password?")).toString();
+
+        socket.on('message', function (data) {
+          if(data) {
+            console.log('recieved - ' + data);
+
+            try {
+              var message = JSON.parse(CryptoJS.AES.decrypt(data, password).toString(CryptoJS.enc.Utf8));
+            } catch(err) {
+              console.log('caught error - ' + err);
+            }
+
+            var html = '<b>' + message.username + ': </b>';
+            html += message.message + '<br />';
+
+            $('#content').append(html);
+
+            content.scrollTop = content.scrollHeight;
+          } else {
+            console.log("There is a problem:");
+          }
+        });
+
+        sendButton.onclick = sendMessage = function() {
+          var message = {
+            message: field.value,
+            username: name
+          };
+          var encrypted = CryptoJS.AES.encrypt(JSON.stringify(message), password);
+          console.log('sending - ' + encrypted.toString());
+          socket.emit('send', encrypted.toString());
+          field.value = "";
+        };
+
+        $(document).ready(function() {
+        $("#field").keyup(function(e) {
+        if(e.keyCode == 13) {
+        sendMessage();
+        }
+        });
+        });
+      }
