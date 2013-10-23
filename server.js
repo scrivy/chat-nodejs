@@ -17,8 +17,26 @@ var io = require('socket.io').listen(app.listen(port));
 console.log("Listening on port " + port);
 
 io.sockets.on('connection', function (socket) {
-//    socket.emit('message', { message: 'welcome to the chat' });
-    socket.on('send', function (data) {
-        io.sockets.emit('message', data);
-    });
+  socket.on('send', function (data) {
+    io.sockets.emit('message', data);
+  });
+
+  socket.on('disconnect', function() {
+    console.log(updatepeople(-1) + ' people connected');
+  });
+
+  var updatepeople = function(offset) {
+    if (!offset)
+      offset = 0;
+
+    var people = {};
+
+    people.count = Object.keys(io.connected).length + offset;
+
+    io.sockets.emit('people', people);
+
+    return people.count;
+  };
+
+  console.log(updatepeople() + ' people connected');
 });

@@ -12,7 +12,9 @@ html
         a.item.active
           i.home.icon
           | Room
-        a.item People
+        a.item
+          span(id='peoplecount')
+          |  People
     .main.container
       #content(style='height: 10em; overflow-y: scroll;')
       br
@@ -52,6 +54,14 @@ html
               console.log('Error decrypting, wrong key probably - ' + err);
             }
           }
+        });
+
+        var peoplecount;
+        var peoplecountid=document.getElementById("peoplecount");
+        socket.on('people', function(data) {
+          peoplecount = data.count;
+
+          peoplecountid.innerHTML = peoplecount;
         });
 
         sendButton.onclick = sendMessage = function() {
