@@ -1,6 +1,6 @@
 var Express = require("express");
 var app = Express();
-var port = process.env.chatport || 3700;
+var port = process.env.chatport || 5000;
 
 app.set('views', __dirname + '/views');
 app.set('view engine', "jade");
@@ -14,6 +14,7 @@ app.get("/", function(req, res) {
 
 app.use(Express.static(__dirname + '/public'));
 var io = require('socket.io').listen(app.listen(port));
+io.set('log level', 2);
 console.log("Listening on port " + port);
 
 io.sockets.on('connection', function (socket) {
