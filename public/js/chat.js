@@ -1,11 +1,23 @@
 window.onload = function() {
 
-  var socket = io.connect(''),
-    field = document.getElementById("field"),
-    sendButton = document.getElementById("send"),
-    content = document.getElementById("content");
-  name = prompt('name?');
-  password = CryptoJS.SHA256(prompt("password?")).toString();
+  var socket = io.connect('')
+    , field = document.getElementById("field")
+    , sendButton = document.getElementById("send")
+    , content = document.getElementById("content")
+    , name
+    , password;
+
+  $('#setup')
+    .modal({
+      onHide: function(){
+        name = $('#name').val();
+        password = CryptoJS.SHA256($('#password').val()).toString();
+      }
+    })
+    .modal('show')
+  ;
+//  name = prompt('name?');
+//  password = CryptoJS.SHA256(prompt("password?")).toString();
 
   socket.on('message', function (data) {
     if(data) {

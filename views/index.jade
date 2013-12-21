@@ -21,6 +21,19 @@ html
       .ui.action.input(style='width:100%;')
         input#field(placeholder='message...')
         #send.ui.button send
+    .ui.dimmer.page.hidden
+      #setup.ui.modal.transition.hidden
+        .header Chat Session Setup
+        .content
+          .ui.large.input.fluid
+            input(type='text', id='name', placeholder='Alias')
+            br
+            br
+            input(type='text', id='password', placeholder='Passphrase')
+          br
+          br
+          .ui.green.button.fluid(onclick="$('#setup').modal('hide');")
+            p Connect
 
     script(src='socket.io/socket.io.js')
     script(src='js/jquery-2.0.3.min.js')
