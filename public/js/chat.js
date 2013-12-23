@@ -7,17 +7,26 @@ window.onload = function() {
     , name
     , password;
 
-  $('#setup')
+  // chat session setup stuff
+  var connectButton = document.getElementById("connect")
+    , setupchatpopupDIV = $('#setup')
+    , nameDIV = $('#name')
+    , passwordDIV = $('#password');
+
+  connectButton.onclick = connecttoserver = function() {
+    setupchatpopupDIV.modal('hide');
+  };
+
+  setupchatpopupDIV
     .modal({
+      closable: false,
       onHide: function(){
-        name = $('#name').val();
-        password = CryptoJS.SHA256($('#password').val()).toString();
+        name = nameDIV.val();
+        password = CryptoJS.SHA256(passwordDIV.val()).toString();
       }
     })
     .modal('show')
   ;
-//  name = prompt('name?');
-//  password = CryptoJS.SHA256(prompt("password?")).toString();
 
   socket.on('message', function (data) {
     if(data) {
@@ -58,6 +67,12 @@ window.onload = function() {
   };
 
   $(document).ready(function() {
+    passwordDIV.keyup(function(e) {
+      if(e.keyCode == 13) {
+        connecttoserver();
+      }
+    });
+
     $("#field").keyup(function(e) {
       if(e.keyCode == 13) {
         sendMessage();
