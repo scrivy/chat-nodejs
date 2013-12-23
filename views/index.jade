@@ -26,10 +26,10 @@ html
         .header Chat Session Setup
         .content
           .ui.large.input.fluid
-            input(type='text', id='name', placeholder='Alias')
+            input#name(type='text', placeholder='Alias')
             br
             br
-            input(type='text', id='password', placeholder='Passphrase')
+            input#password(type='text', placeholder='Passphrase')
           br
           br
           #connect.ui.green.button.fluid
@@ -40,4 +40,7 @@ html
     script(src='js/semantic.min.js')
     script(src='js/aes.js')
     script(src='js/sha256.js')
+    script(src='js/underscore.js')
+    script(src='js/backbone-min.js')
+    script(src='js/backbone.localStorage.js')
     script(src='js/chat.js')
