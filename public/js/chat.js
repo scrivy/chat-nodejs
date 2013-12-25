@@ -1,4 +1,6 @@
-$(function() {
+(function($){
+
+  var socket = io.connect('');
 
   // Lobby Model
   // ----------
@@ -13,31 +15,13 @@ $(function() {
     }
   });
 
-
-  // Lobby View
-  // ----------
-
   var LobbyView = Backbone.View.extend({
-
-    connecttoserver: function() {
-      $('#setup').modal('hide');
-    },
-
-    sendmessage: function() {
-      var message = {
-        message: $('#field').val(),
-        username: this.name
-      };
-      var encrypted = CryptoJS.AES.encrypt(JSON.stringify(message), this.key).toString();
-      console.log('sending - ' + encrypted);
-      this.socket.emit('send', encrypted);
-      $('#field').val('');
-    },
+    el: $('#content'),
 
     initialize: function() {
-      var that = this;
+      _.bindAll(this, 'sendmessage');
 
-      this.socket = io.connect('');
+      var that = this;
 
       // chat session setup stuff
       document.getElementById("connect").onclick = this.connecttoserver;
@@ -56,7 +40,7 @@ $(function() {
       // send message setup stuff
       document.getElementById("send").onclick = this.sendmessage;
 
-      this.socket.on('message', function(data) {
+      socket.on('message', function(data) {
         if (data) {
           console.log('received - ' + data);
 
@@ -76,7 +60,7 @@ $(function() {
         }
       });
 
-      this.socket.on('people', function(data) {
+      socket.on('people', function(data) {
         this.peoplecount = data.count;
 
         document.getElementById("peoplecount").innerHTML = this.peoplecount;
@@ -98,11 +82,28 @@ $(function() {
         })
       ;
 
+    },
+
+    connecttoserver: function() {
+      $('#setup').modal('hide');
+    },
+
+    sendmessage: function() {
+      var message = {
+        message: $('#field').val(),
+        username: this.name
+      };
+      var encrypted = CryptoJS.AES.encrypt(JSON.stringify(message), this.key).toString();
+      console.log('sending - ' + encrypted);
+      socket.emit('send', encrypted);
+      $('#field').val('');
     }
+
   });
 
   // creating the lobby
   var App = new LobbyView({
     model: LobbyModel
   });
-});
+
+})(jQuery);
