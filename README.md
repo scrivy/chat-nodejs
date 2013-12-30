@@ -1,4 +1,4 @@
-[psst chat](https://www.psst.in) - Encrypted Chat
+[psst chat](https://www.psst.in) - Mobile Encrypted Chat
 ====
 
 A truely private mobile chat web application.
