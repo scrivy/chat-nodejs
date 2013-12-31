@@ -1,7 +1,14 @@
-var Express = require("express");
-var app = Express();
-var port = process.env.chatport || 5000;
+var Express = require("express")
+  , Redis = require("redis");
 
+var app = Express()
+  , redis = Redis.createClient();
+
+redis.on('error', function(err) {
+  console.log('redis error - ' + err);
+});
+
+// express stuff
 app.set('views', __dirname + '/views');
 app.set('view engine', "jade");
 app.use(Express.favicon());
@@ -13,6 +20,7 @@ app.get("/", function(req, res) {
 });
 
 app.use(Express.static(__dirname + '/public'));
+var port = process.env.chatport || 5000;
 var io = require('socket.io').listen(app.listen(port));
 io.set('log level', 2);
 console.log("Listening on port " + port);
