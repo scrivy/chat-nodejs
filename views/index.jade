@@ -5,8 +5,6 @@ html
     meta(name='viewport', content='initial-scale=1,maximum-scale=1,user-scalable=no')
     title= 'chat'
     link(rel='stylesheet', href='css/semantic.min.css')
-    link(rel='stylesheet', href='css/checkbox.min.css')
-    link(rel='stylesheet', href='css/modal.min.css')
     link(rel='stylesheet', href='css/chat.css')
   body
     .ui.transparent.inverted.main.menu
@@ -34,7 +32,7 @@ html
             br
             input#password(type='text', placeholder='Passphrase')
           br
-          .ui.toggle.checkbox
+          .ui.checkbox
             input#saveforlater(type='checkbox')
             label save keys locally
           br
@@ -44,8 +42,6 @@ html
     script(src='socket.io/socket.io.js')
     script(src='js/vendor/jquery-2.0.3.min.js')
     script(src='js/vendor/semantic.min.js')
-    script(src='js/vendor/checkbox.min.js')
-    script(src='js/vendor/modal.min.js')
     script(src='js/vendor/aes.js')
     script(src='js/vendor/sha256.js')
     script(src='js/vendor/underscore-min.js')
