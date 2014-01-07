@@ -47,7 +47,7 @@
       queryArguments  = [].slice.call(arguments, 1),
 
       module,
-      invokedResponse
+      returnedValue
     ;
 
     module = {
@@ -65,18 +65,29 @@
 
         // attach history events
         if(settings.history) {
+          module.debug('Initializing page state');
           if( $.address === undefined ) {
             module.error(error.state);
             return false;
           }
-          else if(settings.path === false) {
-            module.error(error.path);
-            return false;
-          }
           else {
-            module.verbose('Address library found adding state change event');
+            if(settings.historyType == 'hash') {
+              module.debug('Using hash state change to manage state');
+            }
+            if(settings.historyType == 'html5') {
+              module.debug('Using HTML5 to manage state');
+              if(settings.path !== false) {
+                $.address
+                  .history(true)
+                  .state(settings.path)
+                ;
+              }
+              else {
+                module.error(error.path);
+                return false;
+              }
+            }
             $.address
-              .state(settings.path)
               .unbind('change')
               .bind('change', module.event.history.change)
             ;
@@ -110,15 +121,16 @@
 
       event: {
         click: function(event) {
-          module.debug('Navigation clicked');
           var
             tabPath = $(this).data(metadata.tab)
           ;
           if(tabPath !== undefined) {
             if(settings.history) {
+              module.verbose('Updating page state', event);
               $.address.value(tabPath);
             }
             else {
+              module.verbose('Changing tab without state management', event);
               module.changeTab(tabPath);
             }
             event.preventDefault();
@@ -169,6 +181,12 @@
           cacheKey = cacheKey || activeTabPath;
           module.debug('Removing cached content for', cacheKey);
           delete cache[cacheKey];
+        }
+      },
+
+      set: {
+        state: function(url) {
+          $.address.value(url);
         }
       },
 
@@ -234,6 +252,11 @@
             else {
               module.debug('Opened local tab', currentPath);
               module.activate.all(currentPath);
+              if( !module.cache.read(currentPath) ) {
+                module.cache.add(currentPath, true);
+                module.debug('First time tab loaded calling tab init');
+                $.proxy(settings.onTabInit, $tab)(currentPath, parameterArray, historyEvent);
+              }
               $.proxy(settings.onTabLoad, $tab)(currentPath, parameterArray, historyEvent);
             }
           }
@@ -443,26 +466,22 @@
       },
 
       setting: function(name, value) {
-        if(value !== undefined) {
-          if( $.isPlainObject(name) ) {
-            $.extend(true, settings, name);
-          }
-          else {
-            settings[name] = value;
-          }
+        if( $.isPlainObject(name) ) {
+          $.extend(true, settings, name);
+        }
+        else if(value !== undefined) {
+          settings[name] = value;
         }
         else {
           return settings[name];
         }
       },
       internal: function(name, value) {
-        if(value !== undefined) {
-          if( $.isPlainObject(name) ) {
-            $.extend(true, module, name);
-          }
-          else {
-            module[name] = value;
-          }
+        if( $.isPlainObject(name) ) {
+          $.extend(true, module, name);
+        }
+        else if(value !== undefined) {
+          module[name] = value;
         }
         else {
           return module[name];
@@ -547,13 +566,14 @@
       },
       invoke: function(query, passedArguments, context) {
         var
+          object = instance,
           maxDepth,
           found,
           response
         ;
         passedArguments = passedArguments || queryArguments;
         context         = element         || context;
-        if(typeof query == 'string' && instance !== undefined) {
+        if(typeof query == 'string' && object !== undefined) {
           query    = query.split(/[\. ]/);
           maxDepth = query.length - 1;
           $.each(query, function(depth, value) {
@@ -561,22 +581,21 @@
               ? value + query[depth + 1].charAt(0).toUpperCase() + query[depth + 1].slice(1)
               : query
             ;
-            if( $.isPlainObject( instance[value] ) && (depth != maxDepth) ) {
-              instance = instance[value];
+            if( $.isPlainObject( object[camelCaseValue] ) && (depth != maxDepth) ) {
+              object = object[camelCaseValue];
             }
-            else if( $.isPlainObject( instance[camelCaseValue] ) && (depth != maxDepth) ) {
-              instance = instance[camelCaseValue];
-            }
-            else if( instance[value] !== undefined ) {
-              found = instance[value];
+            else if( object[camelCaseValue] !== undefined ) {
+              found = object[camelCaseValue];
               return false;
             }
-            else if( instance[camelCaseValue] !== undefined ) {
-              found = instance[camelCaseValue];
+            else if( $.isPlainObject( object[value] ) && (depth != maxDepth) ) {
+              object = object[value];
+            }
+            else if( object[value] !== undefined ) {
+              found = object[value];
               return false;
             }
             else {
-              module.error(error.method);
               return false;
             }
           });
@@ -587,14 +606,14 @@
         else if(found !== undefined) {
           response = found;
         }
-        if($.isArray(invokedResponse)) {
-          invokedResponse.push(response);
+        if($.isArray(returnedValue)) {
+          returnedValue.push(response);
         }
-        else if(typeof invokedResponse == 'string') {
-          invokedResponse = [invokedResponse, response];
+        else if(returnedValue !== undefined) {
+          returnedValue = [returnedValue, response];
         }
         else if(response !== undefined) {
-          invokedResponse = response;
+          returnedValue = response;
         }
         return found;
       }
@@ -613,8 +632,8 @@
       module.initialize();
     }
 
-    return (invokedResponse !== undefined)
-      ? invokedResponse
+    return (returnedValue !== undefined)
+      ? returnedValue
       : this
     ;
 
@@ -644,7 +663,8 @@
 
     // uses pjax style endpoints fetching content from same url with remote-content headers
     auto            : false,
-    history         : false,
+    history         : true,
+    historyType     : 'hash',
     path            : false,
 
     context         : 'body',
