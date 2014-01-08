@@ -16,12 +16,14 @@ html
         a.item
           span(id='peoplecount')
           |  People
+
     .main.container
       #content(style='height: 10em; overflow-y: scroll;')
       br
       .ui.action.input(style='width:100%;')
         input#field(placeholder='message...')
         #send.ui.button send
+
     .ui.dimmer.page.hidden
       #setup.ui.modal.transition.hidden
         .header Chat Session Setup
@@ -34,7 +36,8 @@ html
           br
           .ui.checkbox
             input#saveforlater(type='checkbox')
-            label save keys locally
+            label(for='saveforlater') save session & keys locally
+          br
           br
           #connect.ui.green.button.fluid
             p Connect
