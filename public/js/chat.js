@@ -16,7 +16,12 @@
   });
 
   var LobbyView = Backbone.View.extend({
-    el: $('#content'),
+    el: 'body',
+
+    events: {
+      "keypress input#password" : "connectonpasswordenter",
+      "keypress input#field"    : "sendmessageonenter"
+    },
 
     initialize: function() {
       _.bindAll(this, 'sendmessage');
@@ -65,23 +70,6 @@
 
         document.getElementById("peoplecount").innerHTML = this.peoplecount;
       });
-
-      $('#password')
-        .keyup(function(e) {
-          if(e.keyCode == 13) {
-            that.connecttoserver();
-          }
-        })
-      ;
-
-      $("#field")
-        .keyup(function(e) {
-          if(e.keyCode == 13) {
-            that.sendmessage();
-          }
-        })
-      ;
-
     },
 
     connecttoserver: function() {
@@ -97,6 +85,16 @@
       console.log('sending - ' + encrypted);
       socket.emit('send', encrypted);
       $('#field').val('');
+    },
+
+    connectonpasswordenter: function(e) {
+      if (e.keyCode == 13)
+        this.connecttoserver();
+    },
+
+    sendmessageonenter: function(e) {
+      if (e.keyCode == 13)
+        this.sendmessage();
     }
 
   });
