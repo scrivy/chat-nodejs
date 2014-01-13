@@ -1,4 +1,4 @@
-(function($){
+(function(){
 
   var socket = io.connect('');
 
@@ -19,7 +19,9 @@
     el: 'body',
 
     events: {
+      "click    #connect"       : "connecttoserver",
       "keypress input#password" : "connectonpasswordenter",
+      "click    #send"          : "sendmessage",
       "keypress input#field"    : "sendmessageonenter"
     },
 
@@ -29,8 +31,6 @@
       var that = this;
 
       // chat session setup stuff
-      document.getElementById("connect").onclick = this.connecttoserver;
-
       $('#setup')
         .modal({
           closable: false,
@@ -43,8 +43,6 @@
       ;
 
       // send message setup stuff
-      document.getElementById("send").onclick = this.sendmessage;
-
       socket.on('message', function(data) {
         if (data) {
           console.log('received - ' + data);
@@ -104,4 +102,4 @@
     model: LobbyModel
   });
 
-})(jQuery);
+})();
