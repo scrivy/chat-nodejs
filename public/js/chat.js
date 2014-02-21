@@ -22,8 +22,10 @@
         .modal({
           closable: false,
           onHide: function(){
-            that.name = $('#name').val();
-            that.key = CryptoJS.SHA256($('#password').val()).toString();
+            that.model.set({
+              name: $('#name').val(),
+              key: CryptoJS.SHA256($('#password').val()).toString()
+            });
           }
         })
         .modal('show')
@@ -35,7 +37,7 @@
           console.log('received - ' + data);
 
           try {
-            var message = JSON.parse(CryptoJS.AES.decrypt(data, that.key).toString(CryptoJS.enc.Utf8))
+            var message = JSON.parse(CryptoJS.AES.decrypt(data, that.model.get('key')).toString(CryptoJS.enc.Utf8))
               , contentDIV = $('#content');
 
             var html = '<b>' + message.username + ': </b>';
@@ -64,9 +66,9 @@
     sendmessage: function() {
       var message = {
         message: $('#field').val(),
-        username: this.name
+        username: this.model.get('name')
       };
-      var encrypted = CryptoJS.AES.encrypt(JSON.stringify(message), this.key).toString();
+      var encrypted = CryptoJS.AES.encrypt(JSON.stringify(message), this.model.get('key')).toString();
       console.log('sending - ' + encrypted);
       socket.emit('send', encrypted);
       $('#field').val('');
