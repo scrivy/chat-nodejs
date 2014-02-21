@@ -2,19 +2,6 @@
 
   var socket = io.connect('');
 
-  // Lobby Model
-  // ----------
-
-  var LobbyModel = Backbone.Model.extend({
-    defaults: function() {
-      return {
-        name: 'nameless',
-        key: 'keyless',
-        peoplecount: 1
-      };
-    }
-  });
-
   var LobbyView = Backbone.View.extend({
     el: 'body',
 
@@ -97,9 +84,8 @@
 
   });
 
-  // creating the lobby
   var App = new LobbyView({
-    model: LobbyModel
+    model: new Backbone.Model()
   });
 
 })();
