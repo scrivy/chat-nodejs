@@ -7,40 +7,36 @@ html(lang="en")
     link(rel='stylesheet', href='css/semantic.min.css')
     link(rel='stylesheet', href='css/chat.css')
   body
-    .ui.transparent.inverted.main.menu
-      .container
-        a.item.active
-          i.home.icon
-          | Lobby
-        a.item Friends
-        a.item
-          span(id='peoplecount')
-          |  People
+    #mainappcontainer
+      #lobby
+        .ui.transparent.inverted.main.menu
+          .container
+            a.item.active
+              i.home.icon
+              | Lobby
+            a.item Friends
+            a.item
+              span(id='peoplecount')
+              |  People
 
-    .main.container
-      #content(style='height: 10em; overflow-y: scroll;')
-      br
-      .ui.action.input(style='width:100%;')
-        input#field(placeholder='message...')
-        #send.ui.button send
+        .main.container
+          #content(style='height: 10em; overflow-y: scroll;')
+          br
+          .ui.action.input(style='width:100%;')
+            input#field(placeholder='message...')
+            #send.ui.button send
 
-    .ui.dimmer.page.hidden
-      #setup.ui.modal.transition.hidden
-        .header Chat Session Setup
-        .content
-          .ui.large.input.fluid
-            input#name(type='text', placeholder='Alias')
+        #setup.ui.modal.transition.hidden
+          .header Chat Session Setup
+          .content
+            .ui.large.input.fluid
+              input#name(type='text', placeholder='Alias')
+              br
+              br
+              input#password(type='text', placeholder='Passphrase')
             br
-            br
-            input#password(type='text', placeholder='Passphrase')
-          br
-          .ui.checkbox
-            input#saveforlater(type='checkbox')
-            label(for='saveforlater') save session & keys locally
-          br
-          br
-          #connect.ui.green.button.fluid
-            p Connect
+            .actions
+              .ui.positive.button.huge.fluid(style='margin-left: 0;') Connect
 
     script(src='socket.io/socket.io.js')
     script(src='js/vendor/jquery-2.0.3.min.js')
@@ -49,6 +45,5 @@ html(lang="en")
     script(src='js/vendor/sha256.js')
     script(src='js/vendor/underscore-min.js')
     script(src='js/vendor/backbone-min.js')
-    script(src='js/vendor/backbone.localStorage.js')
     script(src='js/vendor/Nonsense.js')
     script(src='js/chat.js')
