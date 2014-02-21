@@ -11,6 +11,10 @@ html, body {
   z-index: 0;
 }
 
-.main.container {
+#lobby {
   padding: 8px;
+}
+
+#friends {
+  display: none;
 }

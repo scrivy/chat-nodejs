@@ -71,7 +71,16 @@ var LobbyView = Backbone.View.extend({
 
 });
 
-var app = new LobbyView({
+var FriendsView = Backbone.View.extend({
+
+});
+
+var lobbyview = new LobbyView({
   el: document.getElementById('lobby'),
+  model: new Backbone.Model()
+});
+
+var friendsview = new FriendsView({
+  el: document.getElementById('friends'),
   model: new Backbone.Model()
 });
