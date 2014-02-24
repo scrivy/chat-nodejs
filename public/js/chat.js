@@ -1,37 +1,63 @@
+// initialize websocket
 var socket = io.connect('');
 
+// declare views
 var NavibarView = Backbone.View.extend({
   events: {
-    'click    .main.menu'
-  }
-
-});
-
-var LobbyView = Backbone.View.extend({
-  events: {
-    "click    #send"          : "sendmessage",
-    "keypress input#field"    : "sendmessageonenter"
+    'click    a.item' : 'changeview'
   },
 
   initialize: function() {
-    _.bindAll(this, 'sendmessage');
+    _.bindAll(this, 'changeview');
+  },
+
+  changeview: function(e) {
+    this.$el.children().removeClass('active');
+    $(e.target).addClass('active');
+
+    var view;
+    for (view in mainviews)
+      mainviews[view].hide();
+
+    mainviews[e.target.dataset.id].show();
+  }
+});
+
+var MainViewTemplate = Backbone.View.extend({
+  hide: function() {
+    this.el.style.display = 'none';
+  },
+
+  show: function() {
+    this.el.style.display = '';
+  }
+});
+
+var LobbyView = MainViewTemplate.extend({
+  events: {
+    "click    #send"          : "sendmessage",
+    "keypress #field"    : "sendmessageonenter"
+  },
+
+  initialize: function() {
+    _.bindAll(this, 'sendmessage', 'show', 'hide');
 
     var that = this;
 
-    // check if they've visited before and load localstorage
-    if (localStorage) {
-      if (localStorage.getItem)
-    }
+    // prefill name if available
+    if (this.model.get('name'))
+      $('#name').val(this.model.get('name'));
 
     // chat session setup stuff
     $('#setup')
       .modal({
         closable: false,
         onApprove: function(){
-          that.model.set({
-            name: $('#name').val(),
-            key: CryptoJS.SHA256($('#password').val()).toString()
-          });
+          that.model.set('name', $('#name').val());
+          that.key = CryptoJS.SHA256($('#password').val()).toString();
+
+          // save name to localstorage
+          localStorage.setItem('lobbymodel', JSON.stringify(that.model.toJSON()));
         }
       })
       .modal('show')
@@ -43,7 +69,7 @@ var LobbyView = Backbone.View.extend({
         console.log('received - ' + data);
 
         try {
-          var message = JSON.parse(CryptoJS.AES.decrypt(data, that.model.get('key')).toString(CryptoJS.enc.Utf8))
+          var message = JSON.parse(CryptoJS.AES.decrypt(data, that.key).toString(CryptoJS.enc.Utf8))
             , contentDIV = $('#content');
 
           var html = '<b>' + message.username + ': </b>';
@@ -70,7 +96,7 @@ var LobbyView = Backbone.View.extend({
       message: $('#field').val(),
       username: this.model.get('name')
     };
-    var encrypted = CryptoJS.AES.encrypt(JSON.stringify(message), this.model.get('key')).toString();
+    var encrypted = CryptoJS.AES.encrypt(JSON.stringify(message), this.key).toString();
     console.log('sending - ' + encrypted);
     socket.emit('send', encrypted);
     $('#field').val('');
@@ -83,37 +109,46 @@ var LobbyView = Backbone.View.extend({
 
 });
 
-var FriendsView = Backbone.View.extend({
-
+var FriendsView = MainViewTemplate.extend({
+  initialize: function() {
+    _.bindAll(this, 'show', 'hide');
+  }
 });
 
-// check if the user has visited before and load models
-var lobbyview;
+// check if the user has visited before and load views/models
+var mainviews = {};
 (function() {
+  if (!localStorage) throw 'web storage required';
+
+// setup lobby view
   var lobbymodel;
-
-  if (localStorage) {
-    if (lobbymodel = localStorage.getItem('lobbymodel')) {
-      
-
-
-    } else {
-      
-    }
+  if (lobbymodel = localStorage.getItem('lobbymodel')) {
+    lobbymodel = new Backbone.Model(JSON.parse(lobbymodel));
+  } else {
+    lobbymodel = new Backbone.Model();
   }
 
+  mainviews.lobby = new LobbyView({
+    el: document.getElementById('lobby'),
+    model: lobbymodel
+  });
+
+// setup friends view
+  var friendsmodel;
+  if (friendsmodel = localStorage.getItem('friendsmodel')) {
+    friendsmodel = new Backbone.Model(JSON.parse(friendsmodel));
+  } else {
+    friendsmodel = new Backbone.Model();
+  }
+
+  mainviews.friends = new FriendsView({
+    el: document.getElementById('friends'),
+    model: friendsmodel
+  });
 })();
 
-// initialize views
-var lobbyview = new LobbyView({
-  el: document.getElementById('lobby'),
-  model: new Backbone.Model()
-})
-  , friendsview = new FriendsView({
-  el: document.getElementById('friends'),
-  model: new Backbone.Model()
-})
-  , navibarview = new NavibarView({
+// initialize navibar
+var navibarview = new NavibarView({
   el: document.getElementById('navibar'),
   model: new Backbone.Model()
 });
