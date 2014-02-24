@@ -8,15 +8,14 @@ html(lang="en")
     link(rel='stylesheet', href='css/chat.css')
   body
     #mainappcontainer
-      .ui.transparent.inverted.main.menu
-        .container
-          a.item.active
-            i.home.icon
-            | Lobby
-          a.item Friends
-          a.item
-            span(id='peoplecount')
-            |  People
+      #navibar.ui.transparent.inverted.main.menu
+        a.item.active(data-id='lobby')
+          i.home.icon
+          | Lobby
+        a.item(data-id='friends') Friends
+        a.item(data-id='people')
+          span(id='peoplecount')
+          |  People
 
       #lobby
         .main.container

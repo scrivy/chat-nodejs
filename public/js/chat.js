@@ -1,5 +1,12 @@
 var socket = io.connect('');
 
+var NavibarView = Backbone.View.extend({
+  events: {
+    'click    .main.menu'
+  }
+
+});
+
 var LobbyView = Backbone.View.extend({
   events: {
     "click    #send"          : "sendmessage",
@@ -10,6 +17,11 @@ var LobbyView = Backbone.View.extend({
     _.bindAll(this, 'sendmessage');
 
     var that = this;
+
+    // check if they've visited before and load localstorage
+    if (localStorage) {
+      if (localStorage.getItem)
+    }
 
     // chat session setup stuff
     $('#setup')
@@ -75,12 +87,33 @@ var FriendsView = Backbone.View.extend({
 
 });
 
+// check if the user has visited before and load models
+var lobbyview;
+(function() {
+  var lobbymodel;
+
+  if (localStorage) {
+    if (lobbymodel = localStorage.getItem('lobbymodel')) {
+      
+
+
+    } else {
+      
+    }
+  }
+
+})();
+
+// initialize views
 var lobbyview = new LobbyView({
   el: document.getElementById('lobby'),
   model: new Backbone.Model()
-});
-
-var friendsview = new FriendsView({
+})
+  , friendsview = new FriendsView({
   el: document.getElementById('friends'),
+  model: new Backbone.Model()
+})
+  , navibarview = new NavibarView({
+  el: document.getElementById('navibar'),
   model: new Backbone.Model()
 });
