@@ -4,7 +4,7 @@ var socket = io.connect('');
 // declare views
 var NavibarView = Backbone.View.extend({
   events: {
-    'click    a.item' : 'changeview'
+    'click    a.item.mainview' : 'changeview'
   },
 
   initialize: function() {
@@ -12,7 +12,9 @@ var NavibarView = Backbone.View.extend({
   },
 
   changeview: function(e) {
-    this.$el.children().removeClass('active');
+    this.$el.children('.menu').children().removeClass('active');
+    this.$el.children('.sub').hide();
+
     $(e.target).addClass('active');
 
     var view;
@@ -20,6 +22,7 @@ var NavibarView = Backbone.View.extend({
       mainviews[view].hide();
 
     mainviews[e.target.dataset.id].show();
+    this.$el.children('.'+e.target.dataset.id).show();
   }
 });
 

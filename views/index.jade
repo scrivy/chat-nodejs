@@ -8,14 +8,26 @@ html(lang="en")
     link(rel='stylesheet', href='css/chat.css')
   body
     #mainappcontainer
-      #navibar.ui.transparent.inverted.main.menu
-        a.item.active(data-id='lobby')
-          i.home.icon
-          | Lobby
-        a.item(data-id='friends') Friends
-        a.item(data-id='people')
-          span(id='peoplecount')
-          |  People Connected
+      #navibar.ui.tiered.transparent.inverted.menu
+        .menu
+          a.item.mainview.active(data-id='lobby')
+            i.chat.icon
+            | Lobby
+          a.item.mainview(data-id='friends')
+            i.users.icon
+            | Friends
+        .ui.sub.menu.lobby
+          a.item
+            span(id='peoplecount')
+            |  People Connected
+        .ui.sub.menu.friends(style='display: none;')
+          a.item
+            i.icon.small.add
+            | Add
+          a.item
+            i.icon.small.remove
+            | Remove
+
 
       #lobby
         .main.container
