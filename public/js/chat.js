@@ -15,14 +15,22 @@ var NavibarView = Backbone.View.extend({
     this.$el.children('.menu').children().removeClass('active');
     this.$el.children('.sub').hide();
 
-    $(e.target).addClass('active');
+    // select the a node
+    var anode;
+    if (e.target.tagName === 'I') {
+      anode = e.target.parentNode;
+    } else {
+      anode = e.target;
+    }
+
+    $(anode).addClass('active');
 
     var view;
     for (view in mainviews)
       mainviews[view].hide();
 
-    mainviews[e.target.dataset.id].show();
-    this.$el.children('.'+e.target.dataset.id).show();
+    mainviews[anode.dataset.id].show();
+    this.$el.children('.'+anode.dataset.id).show();
   }
 });
 
