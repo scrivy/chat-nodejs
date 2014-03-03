@@ -37,23 +37,23 @@ var NavibarView = Backbone.View.extend({
     for (view in mainviews)
       mainviews[view].hide();
 
-    mainviews[anode.dataset.id].show({
-      complete: function() {
-        viewmodel.onresize();
-      }
-    });
-    
     this.$el.children('.'+anode.dataset.id).show();
+
+    viewmodel
+      .show()
+      .onresize();
   }
 });
 
 var MainViewTemplate = Backbone.View.extend({
   hide: function() {
     this.el.style.display = 'none';
+    return this;
   },
 
   show: function() {
     this.el.style.display = '';
+    return this;
   },
 
   onresize: function() {
