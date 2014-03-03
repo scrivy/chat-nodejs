@@ -9,6 +9,10 @@ var NavibarView = Backbone.View.extend({
 
   initialize: function() {
     _.bindAll(this, 'changeview');
+
+    this.model.set('activetab', 'lobby');
+
+    window.onresize = mainviews[this.model.get('activetab')].onresize;
   },
 
   changeview: function(e) {
@@ -23,13 +27,22 @@ var NavibarView = Backbone.View.extend({
       anode = e.target;
     }
 
+    var viewmodel = mainviews[anode.dataset.id];
+    window.onresize = viewmodel.onresize;
+
     $(anode).addClass('active');
+    this.model.set('activetab', anode.dataset.id);
 
     var view;
     for (view in mainviews)
       mainviews[view].hide();
 
-    mainviews[anode.dataset.id].show();
+    mainviews[anode.dataset.id].show({
+      complete: function() {
+        viewmodel.onresize();
+      }
+    });
+    
     this.$el.children('.'+anode.dataset.id).show();
   }
 });
@@ -41,6 +54,10 @@ var MainViewTemplate = Backbone.View.extend({
 
   show: function() {
     this.el.style.display = '';
+  },
+
+  onresize: function() {
+    this.el.style.height = (window.innerHeight - navibarview.el.clientHeight).toString() + 'px';
   }
 });
 
@@ -51,7 +68,7 @@ var LobbyView = MainViewTemplate.extend({
   },
 
   initialize: function() {
-    _.bindAll(this, 'sendmessage', 'show', 'hide');
+    _.bindAll(this, 'sendmessage', 'show', 'hide', 'onresize');
 
     var that = this;
 
@@ -74,21 +91,25 @@ var LobbyView = MainViewTemplate.extend({
       .modal('show')
     ;
 
+    // cache stuff for onresize
+    this.$inputs = this.$el.find('.ui, .action, .input');
+    this.$navibar = $('#navibar');
+
     // send message setup stuff
+    this.$messages = this.$el.find('.content');
     socket.on('message', function(data) {
       if (data) {
         console.log('received - ' + data);
 
         try {
-          var message = JSON.parse(CryptoJS.AES.decrypt(data, that.key).toString(CryptoJS.enc.Utf8))
-            , contentDIV = $('#content');
+          var message = JSON.parse(CryptoJS.AES.decrypt(data, that.key).toString(CryptoJS.enc.Utf8));
 
           var html = '<b>' + message.username + ': </b>';
           html += message.message + '<br />';
 
-          contentDIV.append(html);
+          that.$messages.append(html);
 
-          contentDIV[0].scrollTop = contentDIV[0].scrollHeight;
+          that.$messages[0].scrollTop = that.$messages[0].scrollHeight;
         } catch(err) {
           console.log('Error decrypting, probably wrong key - ' + err);
         }
@@ -100,6 +121,9 @@ var LobbyView = MainViewTemplate.extend({
 
       document.getElementById("peoplecount").innerHTML = this.peoplecount;
     });
+
+    // make sure onresize in called to set the height of the messages
+    this.onresize();
   },
 
   sendmessage: function() {
@@ -116,6 +140,11 @@ var LobbyView = MainViewTemplate.extend({
   sendmessageonenter: function(e) {
     if (e.keyCode == 13)
       this.sendmessage();
+  },
+
+  // override resize method
+  onresize: function() {
+    this.$messages.height((window.innerHeight - this.$navibar.height() - this.$inputs.height() - 55).toString() + 'px');
   }
 
 });
