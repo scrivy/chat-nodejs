@@ -1,3 +1,5 @@
+'use strict';
+
 var Express = require("express")
   , Redis = require("redis");
 
