@@ -1,14 +1,8 @@
 'use strict';
 
-var Express = require("express")
-  , Redis = require("redis");
+var Express = require("express");
 
-var app = Express()
-  , redis = Redis.createClient();
-
-redis.on('error', function(err) {
-  console.log('redis error - ' + err);
-});
+var app = Express();
 
 // express stuff
 app.set('views', __dirname + '/views');
