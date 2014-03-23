@@ -7,10 +7,10 @@
     "test": "echo 'no test defined'",
     "start": "node server.js"
   },
-  "author": "scrivy", 
+  "author": "scrivy",
   "dependencies": {
-    "socket.io": "^0.9.16",
+    "engine.io": "^1.0.5",
     "express": "^3.4.8",
     "jade": "^1.3.0"
   }
-}  
+}

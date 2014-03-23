@@ -1,27 +1,30 @@
 'use strict';
 
-var Express = require("express");
+var express = require('express')
+  , engine = require('engine.io')
+  , http = require('http');
 
-var app = Express();
+var app = express()
+  , port = process.env.chatport || 5000;
+  , http.createServer(app).listen(port);
+  , server = engine.attach(http);
+
+console.log('Listening on port ' + port);
 
 // express stuff
 app.set('views', __dirname + '/views');
 app.set('view engine', "jade");
-app.use(Express.favicon());
-app.use(Express.logger('dev'));
-app.use(Express.bodyParser());
-app.use(Express.methodOverride());
+app.use(express.favicon());
+app.use(express.logger('dev'));
+app.use(express.bodyParser());
+app.use(express.methodOverride());
 app.get("/", function(req, res) {
   res.render("index");
 });
 
-app.use(Express.static(__dirname + '/public'));
-var port = process.env.chatport || 5000;
-var io = require('socket.io').listen(app.listen(port));
-io.set('log level', 2);
-console.log("Listening on port " + port);
+app.use(express.static(__dirname + '/public'));
 
-io.sockets.on('connection', function (socket) {
+server.on('connection', function (socket) {
   socket.on('send', function (data) {
     io.sockets.emit('message', data);
   });
