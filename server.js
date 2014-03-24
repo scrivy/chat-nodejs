@@ -25,12 +25,15 @@ app.get("/", function(req, res) {
 app.use(express.static(__dirname + '/public'));
 
 server.on('connection', function (socket) {
+  console.log('socket opened');
   socket.on('message', function (data) {
-//    io.sockets.emit('message', data);
+    console.log('socket message - ' + data);
+
   });
 
   socket.on('close', function() {
 //    console.log(updatepeople(-1) + ' people connected');
+  console.log('closed socket');
   });
 
 /*  var updatepeople = function(offset) {

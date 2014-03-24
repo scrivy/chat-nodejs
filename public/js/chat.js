@@ -133,7 +133,7 @@ var LobbyView = MainViewTemplate.extend({
     };
     var encrypted = CryptoJS.AES.encrypt(JSON.stringify(message), this.key).toString();
     console.log('sending - ' + encrypted);
-    socket.emit('send', encrypted);
+    socket.send(JSON.stringify({ action: 'lobbymessage', data: encrypted }));
     $('#field').val('');
   },
 
