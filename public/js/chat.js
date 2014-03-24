@@ -1,5 +1,5 @@
 // initialize websocket
-var socket = io.connect('');
+var socket = new eio.Socket('');
 
 // declare views
 var NavibarView = Backbone.View.extend({
