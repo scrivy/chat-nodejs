@@ -95,6 +95,21 @@ var LobbyView = MainViewTemplate.extend({
     this.$inputs = this.$el.find('.ui, .action, .input');
     this.$navibar = $('#navibar');
 
+    // setup function to handle messages
+    socket.onopen = function() {
+      socket.onmessage = function(data) {
+        console.log(data);
+      };
+
+      socket.onclose = function() {
+        console.log('closing socket');
+
+      };
+
+
+
+    };
+
     // send message setup stuff
     this.$messages = this.$el.find('.content');
     socket.on('message', function(data) {
