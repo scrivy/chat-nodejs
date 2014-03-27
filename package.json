@@ -4,10 +4,14 @@
   "description": "Real time web chat",
   "main": "server.js",
   "scripts": {
-    "test": "echo 'no test defined'",
+    "test": "mocha",
     "start": "node server.js"
   },
   "author": "scrivy",
+  "devDependiencies": {
+    "chai": "^1.9.0",
+    "mocha": "^1.18.0"
+  },
   "dependencies": {
     "engine.io": "^1.0.5",
     "express": "^3.5.0",

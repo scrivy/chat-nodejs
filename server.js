@@ -51,4 +51,3 @@ server.on('connection', function (socket) {
 
 //  console.log(updatepeople() + ' people connected');
 });
-

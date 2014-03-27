@@ -1,3 +1,5 @@
+'use strict';
+
 // initialize websocket
 var socket = new eio.Socket('');
 
