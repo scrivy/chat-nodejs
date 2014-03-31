@@ -12,7 +12,7 @@ var httpserver = http.createServer(app);
 httpserver.listen(port);
 
 var server = engine.attach(httpserver);
-chat.attach(server);
+chat.init(server);
 
 console.log('Listening on port ' + port);
 
@@ -28,12 +28,25 @@ app.use(express.static(__dirname + '/public'));
 
 server.on('connection', function (socket) {
   console.log('socket opened');
+
+  chat.sendclientcount();
+
   socket.on('message', function (message) {
     console.log('socket message - ' + message);
 
+    try {
+      message = JSON.parse(message);
+      if (typeof message.action !== 'string' || typeof message.data !== 'string') {
+        throw new Error('malformed web socket message');
+      }
+    } catch (err) {
+      console.log(err.toString());
+      return;
+    };
+
     switch (message.action) {
       case 'lobbymessage':
-        
+        chat.lobbymessage(message.data);
         break;
 
 
@@ -46,22 +59,7 @@ server.on('connection', function (socket) {
   });
 
   socket.on('close', function() {
-//    console.log(updatepeople(-1) + ' people connected');
-  console.log('closed socket');
+    console.log('socket closed');
+    chat.sendclientcount();
   });
-
-/*  var updatepeople = function(offset) {
-    if (!offset)
-      offset = 0;
-
-    var people = {};
-
-    people.count = Object.keys(io.connected).length + offset;
-
-    io.sockets.emit('people', people);
-
-    return people.count;
-  }; */
-
-//  console.log(updatepeople() + ' people connected');
 });

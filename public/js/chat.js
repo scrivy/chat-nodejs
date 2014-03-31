@@ -70,7 +70,7 @@ var LobbyView = MainViewTemplate.extend({
   },
 
   initialize: function() {
-    _.bindAll(this, 'sendmessage', 'show', 'hide', 'onresize');
+    _.bindAll(this, 'sendmessage', 'show', 'hide', 'onresize', 'receivemessage');
 
     var that = this;
 
@@ -99,8 +99,28 @@ var LobbyView = MainViewTemplate.extend({
 
     // setup function to handle messages
     socket.onopen = function() {
-      socket.onmessage = function(data) {
-        console.log(data);
+      socket.onmessage = function(message) {
+        console.log(message);
+
+        try {
+          message = JSON.parse(message);
+          if (typeof message.action !== 'string' || typeof message.data !== 'string') {
+            throw new Error('malformed web socket message');
+          }
+        } catch (err) {
+          console.log(err.toString());
+          return;
+        };
+
+        switch(message.action) {
+          case 'lobbymessage':
+            that.receivemessage(message.data);
+            break;
+          case 'clientcount':
+            that.clientcount(message.data);
+            break;
+        };
+
       };
 
       socket.onclose = function() {
@@ -114,33 +134,30 @@ var LobbyView = MainViewTemplate.extend({
 
     // send message setup stuff
     this.$messages = this.$el.find('.content');
-    socket.on('message', function(data) {
-      if (data) {
-        console.log('received - ' + data);
-
-        try {
-          var message = JSON.parse(CryptoJS.AES.decrypt(data, that.key).toString(CryptoJS.enc.Utf8));
-
-          var html = '<b>' + message.username + ': </b>';
-          html += message.message + '<br />';
-
-          that.$messages.append(html);
-
-          that.$messages[0].scrollTop = that.$messages[0].scrollHeight;
-        } catch(err) {
-          console.log('Error decrypting, probably wrong key - ' + err);
-        }
-      }
-    });
-
-    socket.on('people', function(data) {
-      this.peoplecount = data.count;
-
-      document.getElementById("peoplecount").innerHTML = this.peoplecount;
-    });
 
     // make sure onresize in called to set the height of the messages
     this.onresize();
+  },
+
+  clientcount: function(count) {
+    document.getElementById("peoplecount").innerHTML = count;
+  },
+
+  receivemessage: function(data) {
+    if (!data) return;
+    
+    try {
+      var message = JSON.parse(CryptoJS.AES.decrypt(data, this.key).toString(CryptoJS.enc.Utf8));
+
+      var html = '<b>' + message.username + ': </b>';
+      html += message.message + '<br />';
+
+      this.$messages.append(html);
+
+      this.$messages[0].scrollTop = this.$messages[0].scrollHeight;
+    } catch(err) {
+      console.log('Error decrypting, probably wrong key - ' + err);
+    }
   },
 
   sendmessage: function() {
