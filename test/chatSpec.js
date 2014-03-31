@@ -3,8 +3,7 @@
 var assert = require('chai').assert
   , chat = require('../lib/chat.js')
   , engine = require('engine.io')
-  , http = require('http')
-  , ws = require('ws');
+  , http = require('http');
 
 var httpserver = http.createServer();
 httpserver.listen(9999);

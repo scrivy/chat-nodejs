@@ -8,16 +8,13 @@
     "start": "node server.js"
   },
   "author": "scrivy",
-  "devDependiencies": {
-    "chai": "^1.9.0",
-    "mocha": "^1.18.0"
-  },
   "dependencies": {
     "engine.io": "^1.0.5",
     "express": "^3.5.0",
     "jade": "^1.3.0"
   },
   "devDependencies": {
-    "ws": "^0.4.31"
+    "chai": "^1.9.0",
+    "mocha": "^1.18.0"
   }
 }
