@@ -1,21 +1,20 @@
 module.exports = function(grunt) {
 
   grunt.initConfig({
-    pkg: grunt.file.readJSON('package.json'),
-    browserify: {
-      client: {
-        src: ['client/chat-client-src.js'],
-        dest: 'public/js/chat-client.js'
-      }
+    jshint: {
+      all: ['public/js/*.js']
     },
     watch: {
-      files: ['<%= browserify.client.src %>'],
-      tasks: ['browserify']
+      files: ['public/js/*.js', 'views/index.jade'],
+      tasks: ['jshint'],
+      options: {
+        livereload: true
+      }
     }
   });
 
-  grunt.loadNpmTasks('grunt-browserify');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
-  grunt.registerTask('default', ['browserify']);
+  grunt.registerTask('default', ['jshint']);
 };

@@ -1,18 +1,18 @@
 'use strict';
 
 var express = require('express')
-  , engine = require('engine.io')
+  , Primus = require('primus')
   , http = require('http')
   , chat = require('./lib/chat');
 
 var port = process.env.chatport || 5000
   , app = express();
-var httpserver = http.createServer(app);
+var server = http.createServer(app);
 
-httpserver.listen(port);
+server.listen(port);
 
-var server = engine.attach(httpserver);
-chat.init(server);
+var primus = new Primus(server, { transformer: 'engine.io' });
+chat.init(primus);
 
 console.log('Listening on port ' + port);
 
@@ -26,23 +26,18 @@ app.get("/", function(req, res) {
 
 app.use(express.static(__dirname + '/public'));
 
-server.on('connection', function (socket) {
+primus.on('connection', function (spark) {
   console.log('socket opened');
 
   chat.sendclientcount();
 
-  socket.on('message', function (message) {
+  spark.on('data', function (message) {
     console.log('socket message - ' + message);
 
-    try {
-      message = JSON.parse(message);
-      if (typeof message.action !== 'string' || !message.data) {
-        throw new Error('malformed web socket message');
-      }
-    } catch (err) {
-      console.log(err.toString());
+    if (!message.action || !message.data) {
+      console.log('malformed socket message, disregarding');
       return;
-    };
+    }
 
     switch (message.action) {
       case 'lobbymessage':
@@ -57,9 +52,9 @@ server.on('connection', function (socket) {
 
 
   });
+});
 
-  socket.on('close', function() {
-    console.log('socket closed');
-    chat.sendclientcount();
-  });
+primus.on('disconnection', function(spark) {
+  console.log('socket closed');
+  chat.sendclientcount();
 });

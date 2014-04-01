@@ -43,8 +43,6 @@ html(lang="en")
             .ui.large.input.fluid
               input#name(type='text', placeholder='Alias')
               br
-              br
-              input#password(type='text', placeholder='Passphrase')
             br
             .actions
               .ui.positive.button.huge.fluid(style='margin-left: 0;') Connect
@@ -56,4 +54,5 @@ html(lang="en")
     script(src='//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js')
     script(src='//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.0/backbone-min.js')
     script(src='js/lib/semantic.min.js')
+    script(src='/primus/primus.js')
     script(src='js/chat-client.js')
