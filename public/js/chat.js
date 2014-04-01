@@ -1,8 +1,5 @@
 'use strict';
 
-// initialize websocket
-var socket = new eio.Socket('');
-
 // declare views
 var NavibarView = Backbone.View.extend({
   events: {
@@ -84,7 +81,6 @@ var LobbyView = MainViewTemplate.extend({
         closable: false,
         onApprove: function(){
           that.model.set('name', $('#name').val());
-          that.key = CryptoJS.SHA256($('#password').val()).toString();
 
           // save name to localstorage
           localStorage.setItem('lobbymodel', JSON.stringify(that.model.toJSON()));
@@ -96,41 +92,6 @@ var LobbyView = MainViewTemplate.extend({
     // cache stuff for onresize
     this.$inputs = this.$el.find('.ui, .action, .input');
     this.$navibar = $('#navibar');
-
-    // setup function to handle messages
-    socket.onopen = function() {
-      socket.onmessage = function(message) {
-        console.log(message);
-
-        try {
-          message = JSON.parse(message);
-          if (typeof message.action !== 'string' || typeof message.data !== 'string') {
-            throw new Error('malformed web socket message');
-          }
-        } catch (err) {
-          console.log(err.toString());
-          return;
-        };
-
-        switch(message.action) {
-          case 'lobbymessage':
-            that.receivemessage(message.data);
-            break;
-          case 'clientcount':
-            that.clientcount(message.data);
-            break;
-        };
-
-      };
-
-      socket.onclose = function() {
-        console.log('closing socket');
-
-      };
-
-
-
-    };
 
     // send message setup stuff
     this.$messages = this.$el.find('.content');
@@ -147,7 +108,7 @@ var LobbyView = MainViewTemplate.extend({
     if (!data) return;
     
     try {
-      var message = JSON.parse(CryptoJS.AES.decrypt(data, this.key).toString(CryptoJS.enc.Utf8));
+      var message = JSON.parse(data);
 
       var html = '<b>' + message.username + ': </b>';
       html += message.message + '<br />';
@@ -165,7 +126,7 @@ var LobbyView = MainViewTemplate.extend({
       message: $('#field').val(),
       username: this.model.get('name')
     };
-    var encrypted = CryptoJS.AES.encrypt(JSON.stringify(message), this.key).toString();
+    var encrypted = JSON.stringify(message);
     console.log('sending - ' + encrypted);
     socket.send(JSON.stringify({ action: 'lobbymessage', data: encrypted }));
     $('#field').val('');
@@ -226,3 +187,36 @@ var navibarview = new NavibarView({
   el: document.getElementById('navibar'),
   model: new Backbone.Model()
 });
+
+// initialize websocket
+var socket = new eio.Socket('');
+
+// setup function to handle messages
+socket.onopen = function() {
+  socket.onmessage = function(message) {
+    console.log(message);
+
+    try {
+      message = JSON.parse(message);
+      if (typeof message.action !== 'string' || typeof message.data !== 'string') {
+        throw new Error('malformed web socket message');
+      }
+    } catch (err) {
+      console.log(err.toString());
+      return;
+    };
+
+    switch(message.action) {
+      case 'lobbymessage':
+        mainviews.lobby.receivemessage(message.data);
+        break;
+      case 'clientcount':
+        mainviews.lobby.clientcount(message.data);
+        break;
+    };
+  };
+};
+
+socket.onclose = function() {
+  console.log('closing socket');
+};
