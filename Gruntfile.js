@@ -4,8 +4,8 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     browserify: {
       client: {
-        src: ['client/chat-src.js'],
-        dest: 'public/js/chat.js'
+        src: ['client/chat-client-src.js'],
+        dest: 'public/js/chat-client.js'
       }
     },
     watch: {

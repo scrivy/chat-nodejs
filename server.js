@@ -36,7 +36,7 @@ server.on('connection', function (socket) {
 
     try {
       message = JSON.parse(message);
-      if (typeof message.action !== 'string' || typeof message.data !== 'string') {
+      if (typeof message.action !== 'string' || !message.data) {
         throw new Error('malformed web socket message');
       }
     } catch (err) {
