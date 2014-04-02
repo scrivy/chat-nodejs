@@ -32,7 +32,7 @@ primus.on('connection', function (spark) {
   chat.sendclientcount();
 
   spark.on('data', function (message) {
-    console.log('socket message - ' + message);
+    console.log('socket message - ' + message.action);
 
     if (!message.action || !message.data) {
       console.log('malformed socket message, disregarding');

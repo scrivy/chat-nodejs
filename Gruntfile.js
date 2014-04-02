@@ -6,7 +6,7 @@ module.exports = function(grunt) {
     },
     watch: {
       files: ['public/js/*.js', 'views/index.jade'],
-      tasks: ['jshint'],
+//      tasks: ['jshint'],
       options: {
         livereload: true
       }
