@@ -63,7 +63,7 @@ var MainViewTemplate = Backbone.View.extend({
 var LobbyView = MainViewTemplate.extend({
   events: {
     "click    #send"          : "sendmessage",
-    "keypress #field"    : "sendmessageonenter"
+    "keypress #field"         : "sendmessageonenter"
   },
 
   initialize: function() {
@@ -76,20 +76,23 @@ var LobbyView = MainViewTemplate.extend({
       $('#name').val(this.model.get('name'));
 
     // chat session setup stuff
-    if (!this.model.get('name')) {
-      $('#setup')
-        .modal({
-          closable: false,
-          onApprove: function(){
-            that.model.set('name', $('#name').val());
+    $('#setup')
+      .modal({
+        closable: false,
+        onApprove: function(){
+          that.model.set('name', $('#name').val());
 
-            // save name to localstorage
-            localStorage.setItem('lobbymodel', JSON.stringify(that.model.toJSON()));
-          }
-        })
-        .modal('show')
-      ;
+          // save name to localstorage
+          localStorage.setItem('lobbymodel', JSON.stringify(that.model.toJSON()));
+        }
+      })
+    ;
+
+    if (!this.model.get('name')) {
+      this.showmodal();
     }
+
+    $('#lobbysetting').on('click', this.showmodal);
 
     // cache stuff for onresize
     this.$inputs = this.$el.find('.ui, .action, .input');
@@ -112,6 +115,10 @@ var LobbyView = MainViewTemplate.extend({
     this.$messages.append(html);
 
     this.$messages[0].scrollTop = this.$messages[0].scrollHeight;
+  },
+
+  showmodal: function() {
+    $('#setup').modal('show');
   },
 
   sendmessage: function() {
