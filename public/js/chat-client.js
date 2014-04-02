@@ -92,7 +92,9 @@ var LobbyView = MainViewTemplate.extend({
       $('#setup').modal('show');
     }
 
-    $('#lobbysetting').on('click', this.showmodal);
+    $('#lobbysetting').on('click', function() {
+      $('#setup').modal('show');
+    });
 
     // cache stuff for onresize
     this.$inputs = this.$el.find('.ui, .action, .input');
