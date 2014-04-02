@@ -89,7 +89,7 @@ var LobbyView = MainViewTemplate.extend({
     ;
 
     if (!this.model.get('name')) {
-      this.showmodal();
+      $('#setup').modal('show');
     }
 
     $('#lobbysetting').on('click', this.showmodal);
@@ -115,10 +115,6 @@ var LobbyView = MainViewTemplate.extend({
     this.$messages.append(html);
 
     this.$messages[0].scrollTop = this.$messages[0].scrollHeight;
-  },
-
-  showmodal: function() {
-    $('#setup').modal('show');
   },
 
   sendmessage: function() {
