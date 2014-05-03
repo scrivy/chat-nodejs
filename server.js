@@ -6,8 +6,8 @@ var express = require('express')
   , chat = require('./lib/chat');
 
 var port = process.env.chatport || 5000
-  , app = express();
-var server = http.createServer(app);
+  , app = express()
+  , server = http.createServer(app);
 
 server.listen(port);
 
