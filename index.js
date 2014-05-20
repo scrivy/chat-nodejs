@@ -19,7 +19,7 @@ console.log('Listening on port ' + port);
 // express stuff
 app.set('views', __dirname + '/views');
 app.set('view engine', "jade");
-app.use(express.logger('dev'));
+//app.use(express.logger('dev'));
 app.get("/", function(req, res) {
   res.render("index");
 });
