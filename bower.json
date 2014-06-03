@@ -1,11 +1,12 @@
 {
   "name": "chat",
-  "description": "secure chat"
+  "description": "secure chat",
   "version": "0.0.0",
   "homepage": "https://github.com/scrivy/chat",
   "license": "MIT",
   "dependencies": {
     "angular": "1.2.x",
-    "angular-route": "1.2.x"
+    "angular-route": "1.2.x",
+    "semantic-ui": "~0.17.0"
   }
 }

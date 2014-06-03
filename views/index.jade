@@ -1,10 +1,10 @@
 doctype html
-html(lang="en")
+html(lang="en", ng-app='chat')
   head
     meta(charset='utf-8')
-    meta(name='viewport', content='initial-scale=1,maximum-scale=1,user-scalable=no')
+    meta(name='viewport', content='initial-scale=1,maximum-scale=1,user-scalable=no, width=device-width')
     title= 'chat'
-    link(rel='stylesheet', href='css/semantic.min.css')
+    link(rel='stylesheet', href='bower_components/semantic-ui/build/packaged/css/semantic.min.css')
     link(rel='stylesheet', href='css/chat.css')
   body
     #mainappcontainer
@@ -52,10 +52,7 @@ html(lang="en")
 
       #friends
 
-    
-    script(src='//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js')
-    script(src='//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js')
-    script(src='//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.0/backbone-min.js')
-    script(src='js/lib/semantic.min.js')
+    script(src='bower_components/jquery/dist/jquery.min.js')
+    script(src='bower_components/semantic-ui/build/packaged/javascript/semantic.min.js')
     script(src='/primus/primus.js')
     script(src='js/chat-client.js')
