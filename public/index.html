@@ -9,6 +9,8 @@
   </head>
 <body>
   <div id='mainappcontainer'>
+
+<!-- begin navibar -->
     <div id='navibar' class='ui tiered transparent inverted menu'>
       <div class='menu'>
         <a data-id='lobby' class='item mainview active'>
@@ -42,42 +44,23 @@
         </a>
       </div>
     </div>
-    
-    <div id='lobby'>
-      <div class='main container'>
-        <div style='overflow-y: scroll;' class='content'></div>
-        <br />
-        <div style='width: 100%;' class='ui action input'>
-          <input id='field' placeholder='message...' />
-          <div id='send' class='ui button'>send</div>
-        </div>
-      </div>
-      <div id='setup' class='ui modal transition hidden'>
-        <div class='header'>
-          Chat Session Setup
-        </div>
-        <div class='content'>
-          <div class='ui large input fluid'>
-            <input id='name' type='text' placeholder='Alias' />
-            <br />
-          </div>
-          <br />
-          <div class='actions'>
-            <div style='margin-left: 0;' class='ui positive button huge fluid'>
-              Connect
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div id='friends'></div>
+<!-- end navibar -->
+
+    <div ng-view></div>
+
   </div>
+
+<!-- bower scripts -->
   <script src='bower_components/jquery/dist/jquery.min.js'></script>
   <script src='bower_components/semantic-ui/build/packaged/javascript/semantic.min.js'></script>
   <script src='bower_components/angular/angular.js'></script>
   <script src='bower_components/angular-route/angular-route.js'></script>
-  <script src='/primus/primus.js'></script>
+
+<!-- scripts -->
+  <script src='primus/primus.js'></script>
   <script src='js/app.js'></script>
+  <script src='js/controllers.js'></script>
+  <script src='js/services.js'></script>
 </body>
 </html>
 
