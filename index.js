@@ -17,13 +17,6 @@ chat.init(primus);
 console.log('Listening on port ' + port);
 
 // express stuff
-app.set('views', __dirname + '/views');
-app.set('view engine', "jade");
-//app.use(express.logger('dev'));
-app.get("/", function(req, res) {
-  res.render("index");
-});
-
 app.use(express.static(__dirname + '/public'));
 
 primus.on('connection', function (spark) {

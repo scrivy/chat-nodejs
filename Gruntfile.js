@@ -5,8 +5,10 @@ module.exports = function(grunt) {
       all: ['public/js/*.js']
     },
     watch: {
-      files: ['public/js/*.js', 'views/index.jade'],
-//      tasks: ['jshint'],
+      files: [
+        'public/js/*.js',
+        'public/index.html'
+      ],
       options: {
         livereload: true
       }
@@ -14,6 +16,4 @@ module.exports = function(grunt) {
   });
 
   grunt.loadNpmTasks('grunt-contrib-watch');
-
-/*  grunt.registerTask('default', ['jshint']); */
 };
