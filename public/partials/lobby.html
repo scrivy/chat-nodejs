@@ -1,27 +1,30 @@
-<div id='lobby'>
-  <div class='main container'>
-    <div style='overflow-y: scroll;' class='content'></div>
-    <br />
-    <div style='width: 100%;' class='ui action input'>
-      <input id='field' placeholder='message...' />
-      <div id='send' class='ui button'>send</div>
-    </div>
+<div class='lobbymessages'>
+  <p ng-repeat='message in messages'>
+    <b>{{message.username}}</b>:
+    {{message.message}}
+  </p>
+</div>
+<br />
+<div class='inputsend'>
+  <div class='ui action input'>
+    <input ng-model='inputmessage' ng-keypress='sendhandler($event)' placeholder='message...' />
+    <div class='ui button' ng-click='sendhandler($event)'>send</div>
   </div>
-  <div id='setup' class='ui modal transition hidden'>
-    <div class='header'>
-      Chat Session Setup
-    </div>
-    <div class='content'>
-      <div class='ui large input fluid'>
-        <input id='name' type='text' placeholder='Alias' />
-        <br />
-      </div>
-      <br />
-      <div class='actions'>
-        <div style='margin-left: 0;' class='ui positive button huge fluid'>
-          Connect
-        </div>
-      </div>
+</div>
+</div>
+<div id='setup' class='ui modal transition hidden'>
+<div class='header'>
+  Chat Session Setup
+</div>
+<div class='content'>
+  <div class='ui large input fluid'>
+    <input id='name' type='text' placeholder='Alias' />
+    <br />
+  </div>
+  <br />
+  <div class='actions'>
+    <div style='margin-left: 0;' class='ui positive button huge fluid'>
+      Connect
     </div>
   </div>
 </div>

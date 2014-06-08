@@ -3,18 +3,29 @@ html, body {
   padding: 0;
 }
 
-#mainappcontainer {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  z-index: 0;
+.lobbymessages {
+  overflow-y: scroll;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  bottom: 60px;
+  left: 5px;
 }
 
-#lobby {
+.lobbymessages p {
+  margin: 2px;
+}
+
+.inputsend {
+  position: absolute;
+  bottom: 10px;
+}
+
+.viewcontainer {
   padding: 8px;
-}
-
-#friends {
-  display: none;
+  position: absolute;
+  top: 83px;
+  right: 0;
+  bottom: 0;
+  left: 0;
 }

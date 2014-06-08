@@ -6,9 +6,11 @@ module.exports = function(grunt) {
     },
     watch: {
       files: [
+        'Gruntfile.js',
         'public/js/*.js',
         'public/index.html',
-        'public/partials/*.html'
+        'public/partials/*.html',
+        'public/css/*'
       ],
       options: {
         livereload: true
