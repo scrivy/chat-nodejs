@@ -5,8 +5,9 @@
   "homepage": "https://github.com/scrivy/chat",
   "license": "MIT",
   "dependencies": {
-    "angular": "1.2.x",
-    "angular-route": "1.2.x",
-    "semantic-ui": "~0.17.0"
+    "semantic-ui": "~0.17.0",
+    "angular": "~1.2.17",
+    "angular-route": "~1.2.17",
+    "angular-animate": "~1.2.17"
   }
 }
