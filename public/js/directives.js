@@ -1,6 +1,6 @@
 'use strict';
 
-chat.directive('autoscrolldown', function($timeout) {
+chat.directive('autoscrolldown', function() {
   return {
     link: function(scope, element, attrs) {
       scope.$watch(function() {
