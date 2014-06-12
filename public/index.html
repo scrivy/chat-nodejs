@@ -26,7 +26,7 @@
         People Connected
       </a>
       <div class='right menu'>
-        <a id='lobbysetting' class='item'>
+        <a ng-click='togglelobbysettings()' class='item'>
           <i class='setting icon'></i>
         </a>
       </div>
@@ -51,6 +51,7 @@
   <script src='bower_components/semantic-ui/build/packaged/javascript/semantic.min.js'></script>
   <script src='bower_components/angular/angular.js'></script>
   <script src='bower_components/angular-route/angular-route.js'></script>
+  <script src='bower_components/angular-animate/angular-animate.js'></script>
 
 <!-- scripts -->
   <script src='primus/primus.js'></script>

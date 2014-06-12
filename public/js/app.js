@@ -2,6 +2,7 @@
 
 var chat = angular.module('chat', [
   'ngRoute',
+  'ngAnimate',
   'chatControllers',
   'chatServices'
 ]);

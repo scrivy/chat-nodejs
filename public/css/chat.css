@@ -24,7 +24,7 @@ html, body {
 .viewcontainer {
   padding: 8px;
   position: absolute;
-  top: 83px;
+  top: 81px;
   right: 0;
   bottom: 0;
   left: 0;
@@ -39,6 +39,16 @@ html, body {
   left: 0;
   background-color: rgba(0,0,0,0.8);
 }
+
+.modalcontainer.ng-hide-add,
+.modalcontainer.ng-hide-remove {
+  transition: 0.3s linear all;
+}
+
+.modalcontainer.ng-hide-add { opacity: 1; }
+.modalcontainer.ng-hide-add.ng-hide-add-active { opacity: 0; }
+.modalcontainer.ng-hide-remove { opacity: 0; }
+.modalcontainer.ng-hide-remove.ng-hide-remove-active { opacity: 1; }
 
 .setup {
   width: 90%;

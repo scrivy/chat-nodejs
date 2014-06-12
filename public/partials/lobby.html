@@ -16,16 +16,16 @@
 <div class='modalcontainer' ng-show='setupvisible'>
   <div class='setup'>
     <div class='ui header'>
-      Chat Session Setup
+      Lobby Session Setup
     </div>
     <div class='content'>
       <div class='ui large input fluid'>
-        <input id='name' type='text' placeholder='Alias' />
+        <input ng-model='username' ng-keypress='sessionsetuphandler($event)' type='text' placeholder='Alias' />
         <br />
       </div>
       <br />
       <div class='actions'>
-        <div style='margin-left: 0;' class='ui positive button huge fluid'>
+        <div ng-click='sessionsetuphandler($event)' style='margin-left: 0;' class='ui positive button huge fluid'>
           Connect
         </div>
       </div>
