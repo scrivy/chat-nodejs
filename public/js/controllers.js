@@ -33,6 +33,12 @@ chatControllers.controller('lobbyCtrl', ['$scope', 'primus',
     primus.on('lobbymessage', function(message) {
       $scope.messages.push(message);
     });
+
+// lobby setup
+    if (!localStorage) throw new Error('web storage required');
+    $scope.username = localStorage.getItem('lobbyusername');
+    $scope.setupvisible = $scope.username ? false : true;
+      
   }
 ]);
 

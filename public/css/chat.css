@@ -29,3 +29,26 @@ html, body {
   bottom: 0;
   left: 0;
 }
+
+.modalcontainer {
+  position: absolute;
+  z-index: 1000;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0,0,0,0.8);
+}
+
+.setup {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #FFF;
+  padding: 1em;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+
+
